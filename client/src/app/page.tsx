@@ -13,6 +13,7 @@ export default function Home() {
   const [showDropdown, setShowDropdown] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
   const router = useRouter()
   const { theme, toggleTheme } = useTheme()
   const { data: session, status } = useSession()
@@ -55,6 +56,37 @@ export default function Home() {
       }
 
       router.refresh()
+    } catch (error) {
+      setError('Something went wrong')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get('email') as string
+    const name = formData.get('name') as string
+    const password = formData.get('password') as string
+
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, password }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.message || 'Registration failed')
+        return
+      }
+
+      await handleLogin(e)
     } catch (error) {
       setError('Something went wrong')
     } finally {
@@ -135,16 +167,34 @@ export default function Home() {
                   Welcome to SyncDraw
                 </h1>
                 <p className="mt-2 text-center text-muted-foreground">
-                  Sign in to get started or skip to continue
+                  {showRegister ? 'Create an account to get started' : 'Sign in to get started or skip to continue'}
                 </p>
               </div>
-              <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+              <form
+                className="mt-8 space-y-6"
+                onSubmit={showRegister ? handleRegister : handleLogin}
+              >
                 {error && (
                   <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
                     {error}
                   </div>
                 )}
                 <div className="space-y-4 rounded-md shadow-sm">
+                  {showRegister && (
+                    <div>
+                      <label htmlFor="name" className="sr-only">
+                        Name
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        className="relative block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        placeholder="Name"
+                      />
+                    </div>
+                  )}
                   <div>
                     <label htmlFor="email" className="sr-only">
                       Email address
@@ -179,25 +229,39 @@ export default function Home() {
                     disabled={isLoading}
                     className="w-full"
                   >
-                    {isLoading ? 'Signing in...' : 'Sign in'}
+                    {isLoading
+                      ? showRegister
+                        ? 'Signing up...'
+                        : 'Signing in...'
+                      : showRegister
+                        ? 'Sign up'
+                        : 'Sign in'}
                   </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleSkip}
-                    className="w-full"
-                  >
-                    Skip for now
-                  </Button>
+                  {!showRegister && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleSkip}
+                      className="w-full"
+                    >
+                      Skip for now
+                    </Button>
+                  )}
                 </div>
               </form>
               <div className="text-center">
-                <Link
-                  href="/register"
+                <button
+                  type="button"
                   className="text-sm text-indigo-600 hover:text-indigo-500"
+                  onClick={() => {
+                    setShowRegister(!showRegister)
+                    setError(null)
+                  }}
                 >
-                  Don't have an account? Sign up
-                </Link>
+                  {showRegister
+                    ? 'Already have an account? Sign in'
+                    : "Don't have an account? Sign up"}
+                </button>
               </div>
             </div>
           ) : (
@@ -257,4 +321,4 @@ export default function Home() {
       </div>
     </div>
   )
-} 
+}
