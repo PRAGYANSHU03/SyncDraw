@@ -742,6 +742,9 @@ video {
 .w-px {
   width: 1px;
 }
+.w-40 {
+  width: 10rem;
+}
 .max-w-md {
   max-width: 28rem;
 }
@@ -963,6 +966,10 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 .font-bold {
   font-weight: 700;

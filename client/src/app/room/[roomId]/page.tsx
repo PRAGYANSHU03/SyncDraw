@@ -80,6 +80,7 @@ export default function Room() {
   }, [roomId])
 
   const handleMouseDown = (e: any) => {
+    console.log('MouseDown', tool, e.target.id())
     if (tool === 'select') {
       const clickedOnEmpty = e.target === e.target.getStage()
       if (clickedOnEmpty) {
@@ -89,10 +90,9 @@ export default function Room() {
 
       const id = e.target.id()
       if (id) {
-        const newSelectedIds = selectedIds.includes(id)
-          ? selectedIds.filter(selectedId => selectedId !== id)
-          : [...selectedIds, id]
-        setSelectedIds(newSelectedIds)
+        if (!selectedIds.includes(id)) {
+          setSelectedIds([id])
+        }
       }
       return
     }
@@ -108,6 +108,7 @@ export default function Room() {
         strokeWidth: tool === 'eraser' ? 30 : strokeWidth,
       })
     } else {
+      console.log('Creating shape', tool, pos)
       setCurrentShape({
         id: Date.now().toString(),
         type: tool as 'rectangle' | 'circle' | 'triangle',
@@ -141,18 +142,28 @@ export default function Room() {
         
         // Check for line intersections
         const lines = drawingArray.toArray() as Line[]
+        const linesToDelete: number[] = []
         lines.forEach((line, index) => {
           if (isLineIntersecting(newLine, line)) {
-            drawingArray.delete(index, 1)
+            linesToDelete.push(index)
           }
+        })
+        // Delete in reverse order to avoid index shifting
+        linesToDelete.sort((a, b) => b - a).forEach(index => {
+          drawingArray.delete(index, 1)
         })
 
         // Check for shape intersections
         const shapes = shapesArray.toArray() as Shape[]
+        const shapesToDelete: number[] = []
         shapes.forEach((shape, index) => {
           if (isShapeIntersecting(newLine, shape)) {
-            shapesArray.delete(index, 1)
+            shapesToDelete.push(index)
           }
+        })
+        // Delete in reverse order to avoid index shifting
+        shapesToDelete.sort((a, b) => b - a).forEach(index => {
+          shapesArray.delete(index, 1)
         })
       }
     } else if (currentShape) {
@@ -227,6 +238,7 @@ export default function Room() {
   const handleMouseUp = () => {
     if (!isDrawing || !doc) return
     setIsDrawing(false)
+    console.log('MouseUp', tool, currentShape)
 
     if (tool === 'pencil' || tool === 'eraser') {
       if (currentLine) {
@@ -235,8 +247,20 @@ export default function Room() {
       }
       setCurrentLine(null)
     } else if (currentShape) {
+      console.log('Pushing shape to Yjs', currentShape)
+      
+      // Handle click-to-create: if size is 0, give it a default size
+      const finalShape = { ...currentShape }
+      if (finalShape.width === 0 && finalShape.height === 0) {
+        finalShape.width = 100
+        finalShape.height = 100
+        // Center the shape around the click 
+        finalShape.x -= 50
+        finalShape.y -= 50
+      }
+
       const shapesArray = doc.getArray('shapes')
-      shapesArray.push([currentShape])
+      shapesArray.push([finalShape])
       setCurrentShape(null)
     }
   }
@@ -253,34 +277,32 @@ export default function Room() {
     node.scaleY(1)
 
     // Update shape or line
-    if (node.className === 'Shape') {
-      const shape = shapes.find(s => s.id === node.id())
-      if (shape) {
-        const shapesArray = doc.getArray('shapes')
-        const index = shapesArray.toArray().findIndex((s: any) => s.id === shape.id)
-        if (index !== -1) {
-          shapesArray.delete(index, 1)
-          shapesArray.insert(index, [{
-            ...shape,
-            x: node.x(),
-            y: node.y(),
-            width: node.width() * scaleX,
-            height: node.height() * scaleY,
-          }])
-        }
+    const id = node.id()
+    const shape = shapes.find(s => s.id === id)
+    const line = lines.find(l => l.id === id)
+
+    if (shape) {
+      const shapesArray = doc.getArray('shapes')
+      const index = shapesArray.toArray().findIndex((s: any) => s.id === shape.id)
+      if (index !== -1) {
+        shapesArray.delete(index, 1)
+        shapesArray.insert(index, [{
+          ...shape,
+          x: node.x(),
+          y: node.y(),
+          width: node.width() * scaleX,
+          height: node.height() * scaleY,
+        }])
       }
-    } else if (node.className === 'Line') {
-      const line = lines.find(l => l.id === node.id())
-      if (line) {
-        const drawingArray = doc.getArray('drawing')
-        const index = drawingArray.toArray().findIndex((l: any) => l.id === line.id)
-        if (index !== -1) {
-          drawingArray.delete(index, 1)
-          drawingArray.insert(index, [{
-            ...line,
-            points: node.points(),
-          }])
-        }
+    } else if (line) {
+      const drawingArray = doc.getArray('drawing')
+      const index = drawingArray.toArray().findIndex((l: any) => l.id === line.id)
+      if (index !== -1) {
+        drawingArray.delete(index, 1)
+        drawingArray.insert(index, [{
+          ...line,
+          points: node.points(),
+        }])
       }
     }
   }

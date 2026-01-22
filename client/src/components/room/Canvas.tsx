@@ -96,15 +96,7 @@ export default function Canvas({
       strokeWidth: shape.strokeWidth,
       fill: 'transparent',
       draggable: tool === 'select',
-      onClick: (e: any) => {
-        if (tool === 'select') {
-          const id = e.target.id()
-          setSelectedIds((prev: string[]) => 
-            prev.includes(id) ? prev.filter((i: string) => i !== id) : [...prev, id]
-          )
-          e.cancelBubble = true
-        }
-      },
+
     }
 
     switch (shape.type) {
@@ -152,14 +144,7 @@ export default function Canvas({
               lineCap="round"
               lineJoin="round"
               draggable={tool === 'select'}
-              onClick={(e) => {
-                if (tool === 'select') {
-                  const id = e.target.id()
-                  setSelectedIds((prev: string[]) => 
-                    prev.includes(id) ? prev.filter((i: string) => i !== id) : [...prev, id]
-                  )
-                }
-              }}
+
             />
           ))}
           {currentLine && (

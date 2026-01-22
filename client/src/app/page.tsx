@@ -10,6 +10,7 @@ import Link from 'next/link'
 
 export default function Home() {
   const [roomId, setRoomId] = useState('')
+  const [isGuest, setIsGuest] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -95,7 +96,7 @@ export default function Home() {
   }
 
   const handleSkip = () => {
-    router.refresh()
+    setIsGuest(true)
   }
 
   return (
@@ -160,7 +161,7 @@ export default function Home() {
           </div>
         </header>
         <main className="flex-1 flex items-center justify-center p-8">
-          {!session ? (
+          {!session && !isGuest ? (
             <div className="max-w-md w-full space-y-8 p-8 bg-card/80 backdrop-blur-sm text-card-foreground rounded-lg shadow-lg border border-border/50">
               <div>
                 <h1 className="text-3xl font-bold text-center">

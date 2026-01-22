@@ -33,7 +33,7 @@ export default function RoomToolbar({
   }
 
   return (
-    <div className="bg-background/80 backdrop-blur-sm border-b p-4 flex items-center justify-between">
+    <div className="bg-background/80 backdrop-blur-sm border-b p-4 flex items-center justify-between relative z-50">
       <div className="flex items-center space-x-6">
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-semibold text-foreground">Room:</h1>
@@ -85,40 +85,37 @@ export default function RoomToolbar({
             <span>Shapes</span>
           </Button>
           {showShapes && (
-            <div className="absolute top-full left-0 mt-1 bg-popover text-popover-foreground rounded-md shadow-lg border py-1 z-10">
-              <Button
-                variant="ghost"
-                className={`w-full justify-start text-foreground ${tool === 'rectangle' ? 'bg-accent' : ''}`}
+            <div className="absolute top-full left-0 mt-1 w-40 bg-popover text-popover-foreground rounded-md shadow-lg border py-1 z-50">
+              <button
+                className={`w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center ${tool === 'rectangle' ? 'bg-accent' : ''}`}
                 onClick={() => {
                   setTool('rectangle')
                   setShowShapes(false)
                 }}
               >
-                <span className="material-icons mr-2">rectangle</span>
+                <span className="material-icons mr-2 text-base">rectangle</span>
                 Rectangle
-              </Button>
-              <Button
-                variant="ghost"
-                className={`w-full justify-start text-foreground ${tool === 'circle' ? 'bg-accent' : ''}`}
+              </button>
+              <button
+                className={`w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center ${tool === 'circle' ? 'bg-accent' : ''}`}
                 onClick={() => {
                   setTool('circle')
                   setShowShapes(false)
                 }}
               >
-                <span className="material-icons mr-2">circle</span>
+                <span className="material-icons mr-2 text-base">circle</span>
                 Circle
-              </Button>
-              <Button
-                variant="ghost"
-                className={`w-full justify-start text-foreground ${tool === 'triangle' ? 'bg-accent' : ''}`}
+              </button>
+              <button
+                className={`w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center ${tool === 'triangle' ? 'bg-accent' : ''}`}
                 onClick={() => {
                   setTool('triangle')
                   setShowShapes(false)
                 }}
               >
-                <span className="material-icons mr-2">change_history</span>
+                <span className="material-icons mr-2 text-base">change_history</span>
                 Triangle
-              </Button>
+              </button>
             </div>
           )}
         </div>
