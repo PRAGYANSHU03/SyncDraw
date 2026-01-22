@@ -24,7 +24,7 @@ A real-time collaborative whiteboard application built with Next.js, Konva.js, a
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/syncdraw.git
+git clone https://github.com/PRAGYANSHU03/SyncDraw.git
 cd syncdraw
 ```
 
