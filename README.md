@@ -1,63 +1,125 @@
-# SyncDraw - Real-time Collaborative Whiteboard
+```markdown
+# 🎨 SyncDraw
 
-A real-time collaborative whiteboard application built with Next.js, Konva.js, and Yjs.
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-## Features
+**SyncDraw** is a high-performance, real-time collaborative whiteboard application. It combines the power of **Konva.js** for high-speed canvas rendering with **Yjs** for seamless, conflict-free data synchronization.
 
-- Real-time collaborative drawing
-- Multiple drawing tools (pen, eraser, shapes)
-- Color picker and stroke width adjustment
-- User authentication
-- Dark/Light mode support
+---
 
-## Tech Stack
+## ✨ Features
 
-- Next.js 14
-- TypeScript
-- Tailwind CSS
-- Konva.js for canvas manipulation
-- Yjs for real-time collaboration
-- NextAuth.js for authentication
-- Prisma for database management
+- 🤝 **Real-time Collaboration**: Multiple users can draw simultaneously with near-zero latency.
+- 🖌️ **Advanced Drawing Tools**:
+  - Pen & Eraser with adjustable pressure/width.
+  - Shape tools: Rectangles, Circles, and Lines.
+- 🎨 **Dynamic Customization**: Full hex color picker and stroke width adjustment.
+- 🔐 **Secure Authentication**: Built-in user accounts via NextAuth.js.
+- 🌗 **Adaptive UI**: Full support for Dark and Light modes using Tailwind CSS.
+- 📱 **Responsive Design**: Works seamlessly across desktops and tablets.
 
-## Getting Started
+---
 
-1. Clone the repository:
-```bash
-git clone https://github.com/PRAGYANSHU03/SyncDraw.git
-cd syncdraw
+## 🛠 Tech Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | [Next.js 14](https://nextjs.org/) (App Router) |
+| **Canvas Engine** | [Konva.js](https://konvajs.org/) & [React-Konva](https://konvajs.org/docs/react/index.html) |
+| **Real-time Sync** | [Yjs](https://docs.yjs.dev/) (CRDTs) |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) |
+| **Database/ORM** | [PostgreSQL](https://www.postgresql.org/) & [Prisma](https://www.prisma.io/) |
+| **Auth** | [NextAuth.js](https://next-auth.js.org/) |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js**: v18.0.0 or higher
+- **PostgreSQL**: A local instance or a cloud provider (e.g., Supabase/Neon)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/PRAGYANSHU03/SyncDraw.git](https://github.com/PRAGYANSHU03/SyncDraw.git)
+   cd syncdraw
+
 ```
 
-2. Install dependencies:
+2. **Install dependencies:**
 ```bash
 npm install
+
 ```
 
-3. Set up environment variables:
-Create a `.env` file in the root directory with the following variables:
+
+3. **Configure Environment Variables:**
+Create a `.env` file in the root directory and add your credentials:
 ```env
-DATABASE_URL="your_database_url"
-NEXTAUTH_SECRET="your_nextauth_secret"
+DATABASE_URL="postgresql://user:password@localhost:5432/syncdraw"
+NEXTAUTH_SECRET="your_secret_key"
 NEXTAUTH_URL="http://localhost:3000"
+
 ```
 
-4. Run the development server:
+
+4. **Initialize Database:**
+```bash
+npx prisma generate
+npx prisma db push
+
+```
+
+
+5. **Start the Development Server:**
 ```bash
 npm run dev
+
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project Structure
 
-- `/client` - Next.js frontend application
-- `/server` - Backend server
-- `/prisma` - Database schema and migrations
+Access the app at `http://localhost:3000`.
 
-## Contributing
+---
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 📂 Project Structure
 
-## License
+```text
+├── client/           # Frontend Next.js application
+│   ├── components/   # React components (Canvas, Toolbar, UserAvatar)
+│   ├── hooks/        # Custom Yjs & Konva hooks for sync logic
+│   └── lib/          # Yjs provider and utility configurations
+├── server/           # WebSocket/Signaling server for Yjs
+├── prisma/           # Database schema and migration files
+└── public/           # Static assets and icons
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions make the open-source community an amazing place to learn and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project.
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the Branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+
+Would you like me to help you create a **"How it works"** section explaining the logic between Yjs and Konva for your documentation?
+
+```
