@@ -1,10 +1,5 @@
 ```markdown
 # 🎨 SyncDraw
-
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-
 **SyncDraw** is a high-performance, real-time collaborative whiteboard application. It combines the power of **Konva.js** for high-speed canvas rendering with **Yjs** for seamless, conflict-free data synchronization.
 
 ---
